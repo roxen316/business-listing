@@ -1,5 +1,5 @@
 {
-  "name": "rewari-directory",
+  "name": "rewari-premium-directory",
   "private": true,
   "scripts": {
     "build": "next build"
