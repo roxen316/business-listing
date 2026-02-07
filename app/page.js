@@ -1,191 +1,215 @@
-// =============================
-// app/page.js — Rewari Yellow Page — FINAL ALL-IN-ONE BUILD
-// Premium Directory + Admin Panel + Edit Everything
-// Admin Login + 2-Step OTP (Free Flow)
-// Data persists via localStorage (Vercel without DB limitation)
-// =============================
-
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-// 🔐 CHANGE THESE AFTER DEPLOY
-const ADMIN_ID = "admin";
-const ADMIN_PASS = "Change@123";
-
-// ===== DEFAULT DATA =====
-const DEFAULT_DATA = {
-  siteName: "Rewari Yellow Page",
-  headline: "Contact For Ads — WhatsApp 9050296596",
-  businesses: [
-    { id: 1, name: "Om Dairy", category: "Dairy", address: "Main Market", phone: "9050001111", offer: "Fresh Paneer", sponsored: true, lat: 28.199, lng: 76.618, photos: [] },
-    { id: 2, name: "Sonu Hero Honda", category: "Bike Dealer", address: "Delhi Road", phone: "9050002222", offer: "Free Checkup", sponsored: true, lat: 28.201, lng: 76.62, photos: [] },
-    { id: 3, name: "Jajoria Cyber Cafe", category: "Cyber Cafe", address: "Bus Stand", phone: "9050003333", offer: "All Forms", sponsored: true, lat: 28.197, lng: 76.616, photos: [] }
-  ]
-};
-
-// ===== STORAGE HELPERS =====
-function loadData() {
-  if (typeof window === "undefined") return DEFAULT_DATA;
-  const d = localStorage.getItem("ryp_data");
-  return d ? JSON.parse(d) : DEFAULT_DATA;
-}
-
-function saveData(d) {
-  localStorage.setItem("ryp_data", JSON.stringify(d));
-}
-
-// ===== ADMIN LOGIN =====
-function AdminLogin({ onSuccess }) {
-  const [id, setId] = useState("");
-  const [pass, setPass] = useState("");
-  const [otp, setOtp] = useState("");
-  const [step, setStep] = useState(1);
-  const [genOtp, setGenOtp] = useState("");
-
-  function step1() {
-    if (id === ADMIN_ID && pass === ADMIN_PASS) {
-      const o = Math.floor(100000 + Math.random()*900000).toString();
-      setGenOtp(o);
-      setStep(2);
-      alert("OTP: " + o + "\nUse Send WhatsApp button");
-    } else alert("Wrong credentials");
+const featured = [
+  {
+    id: 1,
+    name: "Om Dairy",
+    category: "Dairy & Milk Products",
+    address: "Main Market, Rewari",
+    phone: "9050001111",
+    offer: "Fresh Paneer Daily + Bulk Discount",
+    lat: 28.199,
+    lng: 76.618,
+    sponsored: true,
+    photos: [
+      "https://images.unsplash.com/photo-1550583724-b2692b85b150",
+      "https://images.unsplash.com/photo-1606787366850-de6330128bfc"
+    ]
+  },
+  {
+    id: 2,
+    name: "Sonu Hero Honda",
+    category: "Two Wheeler Dealer",
+    address: "Delhi Road, Rewari",
+    phone: "9050002222",
+    offer: "Free Bike Checkup Camp",
+    lat: 28.201,
+    lng: 76.62,
+    sponsored: true,
+    photos: [
+      "https://images.unsplash.com/photo-1558981806-ec527fa84c39"
+    ]
+  },
+  {
+    id: 3,
+    name: "Jajoria Cyber Cafe",
+    category: "Cyber Cafe",
+    address: "Bus Stand Road",
+    phone: "9050003333",
+    offer: "All Online Forms + Printout",
+    lat: 28.197,
+    lng: 76.616,
+    sponsored: true,
+    photos: [
+      "https://images.unsplash.com/photo-1519389950473-47ba0277781c"
+    ]
   }
+];
 
-  function sendWA(){
-    window.open(`https://wa.me/?text=Admin%20OTP:%20${genOtp}`);
-  }
+const others = [
+  { id: 4, name: "BMG Mall", category: "Shopping Mall", address: "Circular Road", phone: "9050004444", lat: 28.192, lng: 76.623 },
+  { id: 5, name: "Rewari Hyundai", category: "Car Dealer", address: "Delhi Road", phone: "9050005555", lat: 28.205, lng: 76.619 },
+  { id: 6, name: "City Medicos", category: "Medical Store", address: "Model Town", phone: "9050006666", lat: 28.204, lng: 76.615 },
+  { id: 7, name: "Sharma Sweets", category: "Sweet Shop", address: "Main Bazaar", phone: "9050007777", lat: 28.198, lng: 76.617 },
+  { id: 8, name: "Gupta Hardware", category: "Hardware", address: "Railway Road", phone: "9050008888", lat: 28.196, lng: 76.614 },
+  { id: 9, name: "Modern Tailors", category: "Tailor", address: "Qutubpur", phone: "9050009999", lat: 28.203, lng: 76.621 },
+  { id: 10, name: "Rao Restaurant", category: "Restaurant", address: "Near Bus Stand", phone: "9050010000", lat: 28.2, lng: 76.618 }
+];
 
-  function step2(){ if (otp === genOtp) onSuccess(); else alert("Wrong OTP"); }
-
+function AdBox({ text }) {
   return (
-    <div style={panel}>
-      <h3>Admin Secure Login</h3>
-      {step===1 && (
-        <>
-          <input style={inp} placeholder="Admin ID" value={id} onChange={e=>setId(e.target.value)}/>
-          <input style={inp} type="password" placeholder="Password" value={pass} onChange={e=>setPass(e.target.value)}/>
-          <button style={btn} onClick={step1}>Login</button>
-        </>
+    <a href="https://wa.me/919050296596" target="_blank">
+      <div style={{
+        background: "#111",
+        border: "1px solid #2a2a2a",
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 16,
+        textAlign: "center",
+        cursor: "pointer"
+      }}>
+        <div style={{ color: "#ffd000", fontWeight: 800, fontSize: 14 }}>ADVERTISEMENT</div>
+        <div style={{ marginTop: 8, fontWeight: 700 }}>{text}</div>
+        <div style={{ opacity: .6, fontSize: 12, marginTop: 6 }}>Tap to Book Ad</div>
+      </div>
+    </a>
+  );
+}
+
+function Card({ b, onOpen }) {
+  return (
+    <div
+      onClick={() => onOpen(b)}
+      style={{
+        background: "linear-gradient(180deg,#1a1a1a,#101010)",
+        border: "1px solid #2a2a2a",
+        borderRadius: 20,
+        padding: 20,
+        boxShadow: "0 10px 30px rgba(0,0,0,.4)",
+        cursor: "pointer",
+        height: "100%"
+      }}
+    >
+      {b.sponsored && (
+        <div style={{
+          background: "#ffd000",
+          color: "black",
+          padding: "4px 10px",
+          borderRadius: 999,
+          fontSize: 12,
+          fontWeight: 800,
+          marginBottom: 8,
+          display: "inline-block"
+        }}>TOP FEATURED</div>
       )}
-      {step===2 && (
-        <>
-          <button style={btn} onClick={sendWA}>Send OTP WhatsApp</button>
-          <input style={inp} placeholder="Enter OTP" value={otp} onChange={e=>setOtp(e.target.value)}/>
-          <button style={btn} onClick={step2}>Verify OTP</button>
-        </>
-      )}
+
+      <h3 style={{ margin: 0 }}>{b.name}</h3>
+      <div style={{ opacity: .6 }}>{b.category}</div>
+      <div style={{ marginTop: 6, fontSize: 14 }}>{b.address}</div>
+      <div style={{ marginTop: 4, fontSize: 14 }}>📞 {b.phone}</div>
+
+      <div style={{ marginTop: 10, color: "#ffd000", fontWeight: 700 }}>
+        View Details →
+      </div>
     </div>
   );
 }
 
-// ===== ADMIN PANEL =====
-function AdminPanel({ data, setData, logout }) {
-  const [b, setB] = useState({ name:"", category:"", address:"", phone:"", offer:"" });
-
-  function add(){
-    const n = { ...b, id: Date.now(), sponsored:false, photos:[] };
-    const d = { ...data, businesses:[...data.businesses, n] };
-    setData(d); saveData(d);
-  }
-
-  function del(id){
-    const d={...data,businesses:data.businesses.filter(x=>x.id!==id)};
-    setData(d); saveData(d);
-  }
-
-  function toggle(id){
-    const d={...data,businesses:data.businesses.map(x=>x.id===id?{...x,sponsored:!x.sponsored}:x)};
-    setData(d); saveData(d);
-  }
-
-  function updateSite(k,v){ const d={...data,[k]:v}; setData(d); saveData(d); }
+function DetailModal({ b, onClose }) {
+  if (!b) return null;
+  const map = `https://www.google.com/maps?q=${b.lat},${b.lng}`;
 
   return (
-    <div style={panel}>
-      <h3>Admin Dashboard</h3>
-      <button style={btn} onClick={logout}>Logout</button>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.7)", padding: 40, zIndex: 50 }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", background: "#111", borderRadius: 20, padding: 24 }}>
+        <h2>{b.name}</h2>
+        <div>{b.category}</div>
+        <div>📍 {b.address}</div>
+        <div>📞 {b.phone}</div>
 
-      <h4>Site Settings</h4>
-      <input style={inp} value={data.siteName} onChange={e=>updateSite("siteName",e.target.value)}/>
-      <input style={inp} value={data.headline} onChange={e=>updateSite("headline",e.target.value)}/>
-
-      <h4>Add Business</h4>
-      {Object.keys(b).map(k=> (
-        <input key={k} style={inp} placeholder={k} value={b[k]} onChange={e=>setB({...b,[k]:e.target.value})}/>
-      ))}
-      <button style={btn} onClick={add}>Add Business</button>
-
-      <h4>Manage</h4>
-      {data.businesses.map(x=> (
-        <div key={x.id} style={row}>
-          <div>{x.name}</div>
-          <div style={{display:"flex",gap:6}}>
-            <button style={btnSmall} onClick={()=>toggle(x.id)}>★</button>
-            <button style={delBtn} onClick={()=>del(x.id)}>Delete</button>
+        {b.offer && (
+          <div style={{
+            marginTop: 12,
+            background: "#2a2200",
+            border: "1px solid #5a4a00",
+            padding: 12,
+            borderRadius: 12,
+            color: "#ffd000",
+            fontWeight: 700
+          }}>
+            🎁 {b.offer}
           </div>
+        )}
+
+        {b.photos && (
+          <div style={{ display: "flex", gap: 10, marginTop: 16, flexWrap: "wrap" }}>
+            {b.photos.map((p, i) => (
+              <img key={i} src={p} style={{ width: 200, borderRadius: 12 }} />
+            ))}
+          </div>
+        )}
+
+        <div style={{ display: "flex", gap: 12, marginTop: 18 }}>
+          <a href={map} target="_blank">
+            <button style={{ padding: 12, borderRadius: 12, background: "#ffd000", border: 0, fontWeight: 800 }}>
+              Open in Google Map
+            </button>
+          </a>
+          <button onClick={onClose} style={{ padding: 12, borderRadius: 12 }}>Close</button>
         </div>
-      ))}
+      </div>
     </div>
   );
 }
 
-function Card({ b }){
-  const map=`https://www.google.com/maps?q=${b.lat},${b.lng}`;
-  return (
-    <div style={card}>
-      {b.sponsored && <div style={badge}>TOP</div>}
-      <h3>{b.name}</h3>
-      <div>{b.category}</div>
-      <div>{b.address}</div>
-      <div>{b.phone}</div>
-      {b.offer && <div style={offer}>🎁 {b.offer}</div>}
-      <a href={map} target="_blank"><button style={btnSmall}>Map</button></a>
-    </div>
-  );
-}
-
-// ===== MAIN =====
-export default function Home(){
-  const [data,setData]=useState(DEFAULT_DATA);
-  const [admin,setAdmin]=useState(false);
-
-  useEffect(()=>{ const d=loadData(); setData(d); },[]);
+export default function Home() {
+  const [open, setOpen] = useState(null);
+  const all = [...featured, ...others];
 
   return (
-    <div style={{background:"#0b0b0c",minHeight:"100vh",color:"white",padding:20}}>
+    <div style={{ background: "#0b0b0c", minHeight: "100vh", color: "#f5f5f5" }}>
 
-      <div style={{background:"#ffd000",color:"black",padding:8,textAlign:"center",fontWeight:800}}>
-        {data.headline}
+      <div style={{ background: "#ffd000", color: "black", fontWeight: 800, padding: 8, textAlign: "center" }}>
+        📢 Contact For Ads — Call / WhatsApp: 9050296596
       </div>
 
-      <h1 style={{textAlign:"center",color:"#ffd000"}}>{data.siteName}</h1>
-
-      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:20}}>
-        {data.businesses.map(b=><Card key={b.id} b={b}/>) }
+      <div style={{ textAlign: "center", padding: "26px 20px" }}>
+        <div style={{
+          fontSize: 40,
+          fontWeight: 900,
+          background: "linear-gradient(90deg,#ffd000,#ffae00)",
+          WebkitBackgroundClip: "text",
+          color: "transparent"
+        }}>
+          Rewari Yellow Page
+        </div>
       </div>
 
-      {/* bottom admin */}
-      {!admin && (
-        <div style={{textAlign:"center",marginTop:40}}>
-          <button style={btn} onClick={()=>setAdmin("login")}>Admin Login</button>
+      <div style={{ display: "grid", gridTemplateColumns: "220px 1fr 220px", gap: 20, padding: "0 20px 40px" }}>
+
+        <div>
+          <AdBox text="Your Shop Ad Here" />
+          <AdBox text="Promote Business" />
         </div>
-      )}
 
-      {admin==="login" && <AdminLogin onSuccess={()=>setAdmin(true)} />}
-      {admin===true && <AdminPanel data={data} setData={setData} logout={()=>setAdmin(false)} />}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 20
+        }}>
+          {all.map(b => <Card key={b.id} b={b} onOpen={setOpen} />)}
+        </div>
 
+        <div>
+          <AdBox text="Top Placement Ad" />
+          <AdBox text="Festival Offer Ad" />
+        </div>
+
+      </div>
+
+      <DetailModal b={open} onClose={() => setOpen(null)} />
     </div>
   );
 }
-
-// ===== styles =====
-const panel={background:"#111",padding:20,borderRadius:16,marginTop:20,maxWidth:500};
-const inp={width:"100%",padding:10,margin:"6px 0",borderRadius:8,border:"1px solid #333",background:"#0f0f0f",color:"white"};
-const btn={padding:10,borderRadius:10,background:"#ffd000",border:0,fontWeight:800,cursor:"pointer",marginTop:8};
-const btnSmall={padding:"6px 10px",borderRadius:8,background:"#ffd000",border:0,fontWeight:700,cursor:"pointer"};
-const delBtn={background:"#400",color:"white",border:0,padding:"6px 10px",borderRadius:8};
-const row={display:"flex",justifyContent:"space-between",marginTop:8,background:"#181818",padding:8,borderRadius:8};
-const card={background:"#151515",padding:16,borderRadius:16,border:"1px solid #2a2a2a"};
-const offer={background:"#2a2200",padding:8,borderRadius:8,color:"#ffd000",marginTop:6};
-const badge={background:"#ffd000",color:"black",display:"inline-block",padding:"2px 8px",borderRadius:999,fontSize:12,fontWeight:800};
