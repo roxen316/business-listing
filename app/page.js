@@ -7,12 +7,12 @@ import { useState } from "react";
 
 // ===== Demo Seed Data (Editable by Admin) =====
 const seed = [
-  { id:1, name:"Om Dairy", category:"Dairy", address:"Circular Road Rewari", phone:"8685868584", whatsapp:"8685868584", offer:"Fresh Desi Ghee ", mapUrl:"https://share.google/NLLPflXGrgCJ7cwsz", color:"#1f2937", featured:true },
+  { id:1, name:"Om Dairy", category:"Dairy", address:"Circular Road Rewari", phone:"8685868584", whatsapp:"8685868584", offer:"Fresh Desi Ghee ", mapUrl:"https://share.google/NLLPflXGrgCJ7cwsz", color:"#FFC0CB", featured:true },
   { id:2, name:"Sonu Hero Honda", category:"Automobile", address:"305, Sector 5 Rewari", phone:"9416441521", whatsapp:"9416441521", offer:"Free Service Check", mapUrl:"https://maps.app.goo.gl/ERtqihb7MVAU2n7M6", color:"#0f766e", featured:true },
   { id:3, name:"Jajoria Cyber Cafe", category:"Cyber Cafe", address:"Bus Stand Rewari", phone:"01274224122", whatsapp:"01274224122", offer:"Print Scan Passport", mapUrl:"https://maps.app.goo.gl/QZPKUNuA2qxVSWi66", color:"#7c3aed", featured:true },
-  { id:4, name:"Red Rose Cafe", category:"Party Cafe", address:"Circular Road Leo Chowk Rewari", phone:"7206452020", whatsapp:"7206452020", offer:"Party Hall ", mapUrl:"https://maps.app.goo.gl/1e7Pu8RrQkiSsvNY7", color:"#1f2937", featured:true },
+  { id:4, name:"Red Rose Cafe", category:"Party Cafe", address:"Circular Road Leo Chowk Rewari", phone:"7206452020", whatsapp:"7206452020", offer:"Party Hall ", mapUrl:"https://maps.app.goo.gl/1e7Pu8RrQkiSsvNY7", color:"##FFC0CB", featured:true },
   { id:5, name:"The Cafe Club", category:"Party Cafe", address:"Konsiwas Road, Rewari", phone:"9896127474", whatsapp:"9896127474", offer:"Party Hall ", mapUrl:"https://maps.app.goo.gl/1uwaZ56rNKwHrPju5", color:"#1f2937", featured:true },
-  { id:6, name:"Big Boy Hotel", category:"Hotel/Rest Room", address:"Krishna Nagar - Konsiwas Road Link Road, Rewari", phone:"7206452020", whatsapp:"7206452020", offer:"Rooms ", mapUrl:"https://maps.app.goo.gl/4wfC64jrvEXY47mU6", color:"#1f2937", featured:true },
+  { id:6, name:"Big Boy Hotel", category:"Hotel/Rest Room", address:"Krishna Nagar - Konsiwas Road Link Road, Rewari", phone:"7206452020", whatsapp:"7206452020", offer:"Rooms ", mapUrl:"https://maps.app.goo.gl/4wfC64jrvEXY47mU6", color:"##7c3aed", featured:true },
 ];
 
 // ===== Card =====
