@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 
-// ===== Seed Data with Images =====
+// ===== Yahan Apna Naya Business Add Karein =====
 const seed = [
   {
     id: 1,
@@ -13,7 +13,6 @@ const seed = [
     whatsapp: "8685868584",
     offer: "Fresh Desi Ghee",
     mapUrl: "https://share.google/NLLPflXGrgCJ7cwsz",
-    color: "#FFC0CB",
     featured: true,
     image: "https://picsum.photos/id/1015/800/600",
   },
@@ -26,7 +25,6 @@ const seed = [
     whatsapp: "9416441521",
     offer: "Free Service Check",
     mapUrl: "https://maps.app.goo.gl/ERtqihb7MVAU2n7M6",
-    color: "#0f766e",
     featured: true,
     image: "https://picsum.photos/id/870/800/600",
   },
@@ -39,7 +37,6 @@ const seed = [
     whatsapp: "01274224122",
     offer: "Print Scan Passport",
     mapUrl: "https://maps.app.goo.gl/QZPKUNuA2qxVSWi66",
-    color: "#7c3aed",
     featured: true,
     image: "https://picsum.photos/id/201/800/600",
   },
@@ -52,7 +49,6 @@ const seed = [
     whatsapp: "7206452020",
     offer: "Party Hall Booking",
     mapUrl: "https://maps.app.goo.gl/1e7Pu8RrQkiSsvNY7",
-    color: "#f97316",
     featured: true,
     image: "https://picsum.photos/id/431/800/600",
   },
@@ -65,7 +61,6 @@ const seed = [
     whatsapp: "9896127474",
     offer: "Party Hall",
     mapUrl: "https://maps.app.goo.gl/1uwaZ56rNKwHrPju5",
-    color: "#1f2937",
     featured: false,
     image: "https://picsum.photos/id/106/800/600",
   },
@@ -78,27 +73,21 @@ const seed = [
     whatsapp: "7206452020",
     offer: "AC Rooms Available",
     mapUrl: "https://maps.app.goo.gl/4wfC64jrvEXY47mU6",
-    color: "#7c3aed",
     featured: true,
     image: "https://picsum.photos/id/669/800/600",
   },
 ];
 
 export default function Page() {
-  const [list, setList] = useState(seed);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const [form, setForm] = useState({
-    name: "", category: "", address: "", phone: "", whatsapp: "",
-    offer: "", mapUrl: "", color: "#1f2937", image: ""
-  });
-  const [editId, setEditId] = useState(null);
+  // Automatically unique categories nikal lega seed data se
+  const categories = ["All", ...new Set(seed.map(b => b.category))];
 
-  const categories = ["All", ...new Set(list.map(b => b.category))];
-
+  // Search aur Category ke hisaab se filter karega
   const filteredList = useMemo(() => {
-    return list
+    return seed
       .filter(b => {
         const matchesSearch = 
           b.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -108,32 +97,12 @@ export default function Page() {
         return matchesSearch && matchesCat;
       })
       .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
-  }, [list, search, selectedCategory]);
-
-  const save = () => {
-    if (!form.name) return alert("Name required!");
-    if (editId) {
-      setList(list.map(x => x.id === editId ? { ...x, ...form } : x));
-    } else {
-      setList([{ ...form, id: Date.now(), featured: false }, ...list]);
-    }
-    setForm({ name: "", category: "", address: "", phone: "", whatsapp: "", offer: "", mapUrl: "", color: "#1f2937", image: "" });
-    setEditId(null);
-  };
-
-  const editBusiness = (b) => {
-    setForm(b);
-    setEditId(b.id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const deleteBusiness = (id) => setList(list.filter(x => x.id !== id));
-  const toggleFeature = (id) => setList(list.map(x => x.id === id ? { ...x, featured: !x.featured } : x));
+  }, [search, selectedCategory]);
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#0f172a", background: "radial-gradient(circle at top right, #1e293b, #0f172a)", color: "#f8fafc", fontFamily: "'Inter', system-ui, sans-serif", paddingBottom: "40px" }}>
 
-      {/* Glassmorphism Header */}
+      {/* Header Section */}
       <div style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(15, 23, 42, 0.8)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255, 255, 255, 0.05)", padding: "30px 20px", textAlign: "center" }}>
         <h1 style={{ margin: 0, fontSize: "clamp(28px, 6vw, 52px)", fontWeight: "900", background: "linear-gradient(to right, #fbbf24, #f59e0b, #ea580c)", WebkitBackgroundClip: "text", color: "transparent", letterSpacing: "-1px" }}>
           Rewari Yellow Pages
@@ -166,7 +135,7 @@ export default function Page() {
           </marquee>
         </div>
 
-        {/* Smooth Scroll Category Filters */}
+        {/* Category Filters */}
         <div style={{ display: "flex", gap: "10px", overflowX: "auto", paddingBottom: "15px", margin: "10px 0 25px", scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
           {categories.map(cat => (
             <button
@@ -189,32 +158,6 @@ export default function Page() {
               {cat}
             </button>
           ))}
-        </div>
-
-        {/* Admin Form (Publicly Visible for now) */}
-        <div style={{ background: "rgba(30, 41, 59, 0.5)", border: "1px solid #334155", padding: "clamp(20px, 4vw, 30px)", borderRadius: "20px", marginBottom: "40px", boxShadow: "0 10px 30px rgba(0,0,0,0.2)" }}>
-          <h3 style={{ fontSize: "22px", margin: "0 0 20px 0", color: "#f8fafc" }}>
-            {editId ? "✏️ Update Business Details" : "➕ Add New Business"}
-          </h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
-            {Object.keys(form).map(key => {
-              if (key === 'color' || key === 'featured' || key === 'id') return null; // Skip non-text fields
-              return (
-                <input
-                  key={key}
-                  placeholder={key.charAt(0).toUpperCase() + key.slice(1) + (key === 'image' ? ' URL (optional)' : '')}
-                  value={form[key]}
-                  onChange={e => setForm({ ...form, [key]: e.target.value })}
-                  style={{ width: "100%", padding: "14px", borderRadius: "12px", background: "rgba(15, 23, 42, 0.6)", border: "1px solid #475569", color: "white", outline: "none", boxSizing: "border-box" }}
-                  onFocus={(e) => e.target.style.border = "1px solid #3b82f6"}
-                  onBlur={(e) => e.target.style.border = "1px solid #475569"}
-                />
-              )
-            })}
-          </div>
-          <button onClick={save} style={{ marginTop: "20px", width: "100%", maxWidth: "300px", padding: "16px", background: "linear-gradient(135deg, #3b82f6, #2563eb)", color: "white", fontWeight: "bold", borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "16px", boxShadow: "0 4px 15px rgba(37, 99, 235, 0.4)", transition: "transform 0.2s" }} onMouseOver={(e) => e.target.style.transform="scale(1.02)"} onMouseOut={(e) => e.target.style.transform="scale(1)"}>
-            {editId ? "Save Changes" : "Publish Business"}
-          </button>
         </div>
 
         {/* Business Cards Grid */}
@@ -281,15 +224,6 @@ export default function Page() {
                   <a href={`https://wa.me/91${b.whatsapp}`} target="_blank" rel="noreferrer" style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", gap: "6px", background: "#22c55e", color: "white", padding: "12px", borderRadius: "10px", fontSize: "14px", fontWeight: "600", textDecoration: "none", boxShadow: "0 4px 15px rgba(34, 197, 94, 0.3)", transition: "transform 0.2s" }} onMouseOver={(e) => e.currentTarget.style.transform="scale(1.03)"} onMouseOut={(e) => e.currentTarget.style.transform="scale(1)"}>
                     💬 Chat
                   </a>
-                </div>
-
-                {/* Admin Controls */}
-                <div style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid rgba(255,255,255,0.05)", display: "flex", gap: "8px" }}>
-                  <button onClick={() => editBusiness(b)} style={{ flex: 1, padding: "8px", background: "#334155", color: "white", borderRadius: "6px", border: "none", fontSize: "12px", cursor: "pointer" }}>Edit</button>
-                  <button onClick={() => toggleFeature(b.id)} style={{ flex: 1, padding: "8px", background: b.featured ? "#b45309" : "#334155", color: "white", borderRadius: "6px", border: "none", fontSize: "12px", cursor: "pointer" }}>
-                    {b.featured ? "⭐ Unstar" : "⭐ Star"}
-                  </button>
-                  <button onClick={() => deleteBusiness(b.id)} style={{ padding: "8px 12px", background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", borderRadius: "6px", border: "1px solid rgba(239, 68, 68, 0.3)", fontSize: "12px", cursor: "pointer" }}>🗑️</button>
                 </div>
               </div>
             </div>
