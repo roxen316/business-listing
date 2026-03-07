@@ -30,18 +30,6 @@ const seed = [
   },
   {
     id: 3,
-    name: "Jajoria Cyber Cafe",
-    category: "Cyber Cafe",
-    address: "Bus Stand Rewari",
-    phone: "01274224122",
-    whatsapp: "01274224122",
-    offer: "Print Scan Passport",
-    mapUrl: "https://maps.app.goo.gl/QZPKUNuA2qxVSWi66",
-    featured: true,
-    image: "https://picsum.photos/id/201/800/600",
-  },
-  {
-    id: 4,
     name: "Red Rose Cafe",
     category: "Party Cafe",
     address: "Circular Road Leo Chowk Rewari",
@@ -53,7 +41,7 @@ const seed = [
     image: "https://picsum.photos/id/431/800/600",
   },
   {
-    id: 5,
+    id: 4,
     name: "The Cafe Club",
     category: "Party Cafe",
     address: "Konsiwas Road, Rewari",
@@ -65,7 +53,7 @@ const seed = [
     image: "https://picsum.photos/id/106/800/600",
   },
   {
-    id: 6,
+    id: 5,
     name: "Big Boy Hotel",
     category: "Hotel",
     address: "Krishna Nagar - Konsiwas Road",
