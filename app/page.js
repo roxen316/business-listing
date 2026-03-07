@@ -86,11 +86,6 @@ const seed = [
 
 export default function Page() {
   const [list, setList] = useState(seed);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [loginId, setLoginId] = useState("");
-  const [loginPass, setLoginPass] = useState("");
-
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
@@ -99,9 +94,6 @@ export default function Page() {
     offer: "", mapUrl: "", color: "#1f2937", image: ""
   });
   const [editId, setEditId] = useState(null);
-
-  const ADMIN_ID = "admin";
-  const ADMIN_PASS = "admin123";
 
   const categories = ["All", ...new Set(list.map(b => b.category))];
 
@@ -118,15 +110,8 @@ export default function Page() {
       .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
   }, [list, search, selectedCategory]);
 
-  const doLogin = () => {
-    if (loginId === ADMIN_ID && loginPass === ADMIN_PASS) {
-      setIsAdmin(true);
-      setShowLogin(false);
-    } else alert("Wrong login");
-  };
-
   const save = () => {
-    if (!form.name) return alert("Name required");
+    if (!form.name) return alert("Name required!");
     if (editId) {
       setList(list.map(x => x.id === editId ? { ...x, ...form } : x));
     } else {
@@ -144,49 +129,61 @@ export default function Page() {
 
   const deleteBusiness = (id) => setList(list.filter(x => x.id !== id));
   const toggleFeature = (id) => setList(list.map(x => x.id === id ? { ...x, featured: !x.featured } : x));
-  const updateColor = (id, color) => setList(list.map(x => x.id === id ? { ...x, color } : x));
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0f172a, #1e293b, #020617)", color: "#e5e7eb", fontFamily: "system-ui, sans-serif" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "#0f172a", background: "radial-gradient(circle at top right, #1e293b, #0f172a)", color: "#f8fafc", fontFamily: "'Inter', system-ui, sans-serif", paddingBottom: "40px" }}>
 
-      {/* Header */}
-      <div style={{ textAlign: "center", padding: "40px 20px 20px", background: "rgba(0,0,0,0.4)" }}>
-        <div style={{ fontSize: "48px", fontWeight: "900", background: "linear-gradient(90deg, #ffd000, #ff8f00)", WebkitBackgroundClip: "text", color: "transparent" }}>
-          Rewari Yellow Page
+      {/* Glassmorphism Header */}
+      <div style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(15, 23, 42, 0.8)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255, 255, 255, 0.05)", padding: "30px 20px", textAlign: "center" }}>
+        <h1 style={{ margin: 0, fontSize: "clamp(28px, 6vw, 52px)", fontWeight: "900", background: "linear-gradient(to right, #fbbf24, #f59e0b, #ea580c)", WebkitBackgroundClip: "text", color: "transparent", letterSpacing: "-1px" }}>
+          Rewari Yellow Pages
+        </h1>
+        <p style={{ marginTop: "6px", color: "#cbd5e1", fontSize: "clamp(14px, 3vw, 18px)", fontWeight: "500" }}>
+          Your Local Business Directory
+        </p>
+
+        {/* Search Bar */}
+        <div style={{ maxWidth: "600px", margin: "20px auto 0", position: "relative" }}>
+          <span style={{ position: "absolute", left: "18px", top: "50%", transform: "translateY(-50%)", fontSize: "20px" }}>🔍</span>
+          <input
+            type="text"
+            placeholder="Search businesses, categories, or areas..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ width: "100%", padding: "16px 20px 16px 50px", fontSize: "16px", borderRadius: "16px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "white", outline: "none", boxSizing: "border-box", transition: "all 0.3s" }}
+            onFocus={(e) => e.target.style.border = "1px solid #fbbf24"}
+            onBlur={(e) => e.target.style.border = "1px solid rgba(255,255,255,0.1)"}
+          />
         </div>
-        <p style={{ marginTop: "8px", color: "#fde047", fontSize: "18px" }}>Local Business Directory</p>
-
-        <marquee style={{ margin: "15px 0", color: "#fde047", fontWeight: "700", fontSize: "18px" }}>
-          Contact For Ads & Featured Listing — Call / WhatsApp: 9050296596
-        </marquee>
-
-        {/* Search */}
-        <input
-          type="text"
-          placeholder="Search business, category or area..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{ width: "100%", maxWidth: "700px", padding: "16px 24px", fontSize: "18px", borderRadius: "999px", border: "none", background: "#1e2937", color: "white", marginTop: "10px" }}
-        />
       </div>
 
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "20px" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 20px" }}>
 
-        {/* Category Filters */}
-        <div style={{ display: "flex", gap: "12px", overflowX: "auto", padding: "15px 0", flexWrap: "wrap" }}>
+        {/* Marquee Ad */}
+        <div style={{ background: "rgba(245, 158, 11, 0.1)", border: "1px solid rgba(245, 158, 11, 0.3)", borderRadius: "12px", margin: "20px 0", padding: "12px", overflow: "hidden" }}>
+          <marquee style={{ color: "#fbbf24", fontWeight: "600", fontSize: "15px" }}>
+            📢 Want to feature your business here? Call / WhatsApp: 9050296596 for Advertising!
+          </marquee>
+        </div>
+
+        {/* Smooth Scroll Category Filters */}
+        <div style={{ display: "flex", gap: "10px", overflowX: "auto", paddingBottom: "15px", margin: "10px 0 25px", scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
           {categories.map(cat => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               style={{
-                padding: "10px 24px",
-                borderRadius: "999px",
+                flexShrink: 0,
+                padding: "10px 20px",
+                borderRadius: "12px",
+                fontSize: "14px",
                 fontWeight: "600",
-                background: selectedCategory === cat ? "#ffd000" : "#1e2937",
-                color: selectedCategory === cat ? "#000" : "#ddd",
-                border: "1px solid #334155",
+                background: selectedCategory === cat ? "#fbbf24" : "rgba(255,255,255,0.05)",
+                color: selectedCategory === cat ? "#0f172a" : "#e2e8f0",
+                border: selectedCategory === cat ? "1px solid #fbbf24" : "1px solid rgba(255,255,255,0.1)",
                 cursor: "pointer",
-                transition: "all 0.3s"
+                transition: "all 0.3s ease",
+                whiteSpace: "nowrap"
               }}
             >
               {cat}
@@ -194,117 +191,120 @@ export default function Page() {
           ))}
         </div>
 
-        {/* Admin Form */}
-        {isAdmin && (
-          <div style={{ background: "#1e2937", padding: "30px", borderRadius: "20px", marginBottom: "40px", border: "2px solid #ffd000" }}>
-            <h3 style={{ fontSize: "26px", marginBottom: "20px" }}>Add / Edit Business</h3>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "15px" }}>
-              {Object.keys(form).map(key => (
+        {/* Admin Form (Publicly Visible for now) */}
+        <div style={{ background: "rgba(30, 41, 59, 0.5)", border: "1px solid #334155", padding: "clamp(20px, 4vw, 30px)", borderRadius: "20px", marginBottom: "40px", boxShadow: "0 10px 30px rgba(0,0,0,0.2)" }}>
+          <h3 style={{ fontSize: "22px", margin: "0 0 20px 0", color: "#f8fafc" }}>
+            {editId ? "✏️ Update Business Details" : "➕ Add New Business"}
+          </h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+            {Object.keys(form).map(key => {
+              if (key === 'color' || key === 'featured' || key === 'id') return null; // Skip non-text fields
+              return (
                 <input
                   key={key}
-                  placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
+                  placeholder={key.charAt(0).toUpperCase() + key.slice(1) + (key === 'image' ? ' URL (optional)' : '')}
                   value={form[key]}
                   onChange={e => setForm({ ...form, [key]: e.target.value })}
-                  style={{ padding: "14px", borderRadius: "12px", background: "#0f172a", border: "1px solid #475569", color: "white" }}
+                  style={{ width: "100%", padding: "14px", borderRadius: "12px", background: "rgba(15, 23, 42, 0.6)", border: "1px solid #475569", color: "white", outline: "none", boxSizing: "border-box" }}
+                  onFocus={(e) => e.target.style.border = "1px solid #3b82f6"}
+                  onBlur={(e) => e.target.style.border = "1px solid #475569"}
                 />
-              ))}
-            </div>
-            <button onClick={save} style={{ marginTop: "20px", padding: "14px 40px", background: "#ffd000", color: "#000", fontWeight: "bold", borderRadius: "12px", fontSize: "18px" }}>
-              {editId ? "Update Business" : "Add Business"}
-            </button>
+              )
+            })}
           </div>
-        )}
+          <button onClick={save} style={{ marginTop: "20px", width: "100%", maxWidth: "300px", padding: "16px", background: "linear-gradient(135deg, #3b82f6, #2563eb)", color: "white", fontWeight: "bold", borderRadius: "12px", border: "none", cursor: "pointer", fontSize: "16px", boxShadow: "0 4px 15px rgba(37, 99, 235, 0.4)", transition: "transform 0.2s" }} onMouseOver={(e) => e.target.style.transform="scale(1.02)"} onMouseOut={(e) => e.target.style.transform="scale(1)"}>
+            {editId ? "Save Changes" : "Publish Business"}
+          </button>
+        </div>
 
-        {/* Business Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "28px" }}>
+        {/* Business Cards Grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px" }}>
           {filteredList.map(b => (
             <div
               key={b.id}
               style={{
-                background: "#1e2937",
-                borderRadius: "24px",
+                background: "#1e293b",
+                borderRadius: "20px",
                 overflow: "hidden",
-                boxShadow: "0 15px 35px rgba(0,0,0,0.6)",
-                border: "1px solid #334155",
-                transition: "all 0.4s",
-                position: "relative"
+                border: b.featured ? "2px solid #fbbf24" : "1px solid #334155",
+                transition: "all 0.3s ease",
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                boxShadow: b.featured ? "0 10px 30px rgba(251, 191, 36, 0.15)" : "0 4px 20px rgba(0,0,0,0.3)"
               }}
-              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-12px)"}
-              onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-8px)"; e.currentTarget.style.boxShadow = "0 20px 40px rgba(0,0,0,0.4)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = b.featured ? "0 10px 30px rgba(251, 191, 36, 0.15)" : "0 4px 20px rgba(0,0,0,0.3)"; }}
             >
-              {/* Image */}
-              <div style={{ position: "relative", height: "220px" }}>
-                <img src={b.image} alt={b.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              {/* Card Image Wrapper */}
+              <div style={{ position: "relative", height: "180px", background: "#334155" }}>
+                <img src={b.image || "https://placehold.co/800x600/1e293b/FFF?text=No+Image"} alt={b.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "linear-gradient(to top, #1e293b, transparent)" }}></div>
+                
                 {b.featured && (
-                  <div style={{ position: "absolute", top: "14px", left: "14px", background: "#ffd000", color: "#000", padding: "6px 16px", borderRadius: "999px", fontWeight: "800", fontSize: "13px", boxShadow: "0 4px 15px rgba(255,208,0,0.5)" }}>
-                    ⭐ FEATURED
+                  <div style={{ position: "absolute", top: "12px", right: "12px", background: "linear-gradient(135deg, #fbbf24, #f59e0b)", color: "#000", padding: "4px 12px", borderRadius: "8px", fontWeight: "800", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px", boxShadow: "0 4px 10px rgba(245, 158, 11, 0.4)" }}>
+                    Featured
                   </div>
                 )}
+                
+                <div style={{ position: "absolute", bottom: "12px", left: "16px", background: "rgba(15, 23, 42, 0.7)", backdropFilter: "blur(4px)", padding: "4px 10px", borderRadius: "6px", fontSize: "12px", color: "#60a5fa", fontWeight: "600" }}>
+                  {b.category}
+                </div>
               </div>
 
-              {/* Content */}
-              <div style={{ padding: "22px" }}>
-                <h3 style={{ fontSize: "24px", fontWeight: "800", margin: "0 0 6px 0" }}>{b.name}</h3>
-                <div style={{ color: "#ffd000", fontWeight: "600" }}>{b.category}</div>
+              {/* Card Body */}
+              <div style={{ padding: "20px", display: "flex", flexDirection: "column", flexGrow: 1 }}>
+                <h3 style={{ fontSize: "22px", fontWeight: "700", margin: "0 0 10px 0", color: "#f8fafc", lineHeight: "1.3" }}>
+                  {b.name}
+                </h3>
 
-                <div style={{ marginTop: "16px", lineHeight: "1.6", fontSize: "15px" }}>
-                  📍 {b.address}<br />
-                  📞 {b.phone}
+                <div style={{ color: "#94a3b8", fontSize: "14px", lineHeight: "1.6", marginBottom: "15px", flexGrow: 1 }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: "8px", marginBottom: "6px" }}>
+                    <span>📍</span> <span>{b.address}</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span>📞</span> <span>{b.phone}</span>
+                  </div>
                 </div>
 
                 {b.offer && (
-                  <div style={{ marginTop: "18px", background: "#3a2f00", border: "1px solid #ffd000", padding: "12px", borderRadius: "14px", color: "#ffe082" }}>
-                    🎁 {b.offer}
+                  <div style={{ background: "rgba(34, 197, 94, 0.1)", border: "1px dashed rgba(34, 197, 94, 0.4)", padding: "10px", borderRadius: "10px", color: "#4ade80", fontSize: "13px", fontWeight: "500", marginBottom: "20px", textAlign: "center" }}>
+                    🎉 {b.offer}
                   </div>
                 )}
 
-                <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
-                  <a href={b.mapUrl} target="_blank" style={{ flex: 1, background: "#3b82f6", color: "white", padding: "14px", borderRadius: "14px", textAlign: "center", fontWeight: "600", textDecoration: "none" }}>
-                    📍 Open Map
+                {/* Action Buttons */}
+                <div style={{ display: "flex", gap: "10px", marginTop: "auto" }}>
+                  <a href={b.mapUrl} target="_blank" rel="noreferrer" style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", gap: "6px", background: "rgba(59, 130, 246, 0.1)", color: "#60a5fa", border: "1px solid rgba(59, 130, 246, 0.3)", padding: "12px", borderRadius: "10px", fontSize: "14px", fontWeight: "600", textDecoration: "none", transition: "background 0.2s" }} onMouseOver={(e) => e.currentTarget.style.background="rgba(59, 130, 246, 0.2)"} onMouseOut={(e) => e.currentTarget.style.background="rgba(59, 130, 246, 0.1)"}>
+                    📍 Map
                   </a>
-                  <a href={`https://wa.me/91${b.whatsapp}`} target="_blank" style={{ flex: 1, background: "#25D366", color: "white", padding: "14px", borderRadius: "14px", textAlign: "center", fontWeight: "600", textDecoration: "none" }}>
-                    💬 WhatsApp
+                  <a href={`https://wa.me/91${b.whatsapp}`} target="_blank" rel="noreferrer" style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", gap: "6px", background: "#22c55e", color: "white", padding: "12px", borderRadius: "10px", fontSize: "14px", fontWeight: "600", textDecoration: "none", boxShadow: "0 4px 15px rgba(34, 197, 94, 0.3)", transition: "transform 0.2s" }} onMouseOver={(e) => e.currentTarget.style.transform="scale(1.03)"} onMouseOut={(e) => e.currentTarget.style.transform="scale(1)"}>
+                    💬 Chat
                   </a>
                 </div>
 
-                {isAdmin && (
-                  <div style={{ marginTop: "20px", paddingTop: "18px", borderTop: "1px solid #475569", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                    <button onClick={() => editBusiness(b)} style={{ flex: 1, padding: "10px", background: "#334155", borderRadius: "10px" }}>Edit</button>
-                    <button onClick={() => toggleFeature(b.id)} style={{ flex: 1, padding: "10px", background: "#334155", borderRadius: "10px" }}>
-                      {b.featured ? "Unfeature" : "Feature"}
-                    </button>
-                    <input type="color" value={b.color} onChange={e => updateColor(b.id, e.target.value)} style={{ width: "50px", height: "42px", border: "none", borderRadius: "10px" }} />
-                    <button onClick={() => deleteBusiness(b.id)} style={{ flex: 1, padding: "10px", background: "#7f1d1d", color: "#fecaca", borderRadius: "10px" }}>Delete</button>
-                  </div>
-                )}
+                {/* Admin Controls */}
+                <div style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid rgba(255,255,255,0.05)", display: "flex", gap: "8px" }}>
+                  <button onClick={() => editBusiness(b)} style={{ flex: 1, padding: "8px", background: "#334155", color: "white", borderRadius: "6px", border: "none", fontSize: "12px", cursor: "pointer" }}>Edit</button>
+                  <button onClick={() => toggleFeature(b.id)} style={{ flex: 1, padding: "8px", background: b.featured ? "#b45309" : "#334155", color: "white", borderRadius: "6px", border: "none", fontSize: "12px", cursor: "pointer" }}>
+                    {b.featured ? "⭐ Unstar" : "⭐ Star"}
+                  </button>
+                  <button onClick={() => deleteBusiness(b.id)} style={{ padding: "8px 12px", background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", borderRadius: "6px", border: "1px solid rgba(239, 68, 68, 0.3)", fontSize: "12px", cursor: "pointer" }}>🗑️</button>
+                </div>
               </div>
             </div>
           ))}
         </div>
-      </div>
-
-      {!isAdmin && (
-        <div style={{ textAlign: "center", padding: "40px" }}>
-          <button onClick={() => setShowLogin(true)} style={{ padding: "14px 32px", background: "#334155", borderRadius: "999px", fontSize: "17px" }}>
-            Admin Login
-          </button>
-        </div>
-      )}
-
-      {/* Login Modal */}
-      {showLogin && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
-          <div style={{ background: "#1e2937", padding: "30px", borderRadius: "20px", width: "340px" }}>
-            <h3 style={{ fontSize: "24px", marginBottom: "20px" }}>Admin Login</h3>
-            <input placeholder="Admin ID" value={loginId} onChange={e => setLoginId(e.target.value)} style={{ width: "100%", padding: "14px", marginBottom: "12px", borderRadius: "12px", background: "#0f172a" }} />
-            <input type="password" placeholder="Password" value={loginPass} onChange={e => setLoginPass(e.target.value)} style={{ width: "100%", padding: "14px", marginBottom: "20px", borderRadius: "12px", background: "#0f172a" }} />
-            <div style={{ display: "flex", gap: "12px" }}>
-              <button onClick={doLogin} style={{ flex: 1, padding: "14px", background: "#ffd000", color: "#000", fontWeight: "bold", borderRadius: "12px" }}>Login</button>
-              <button onClick={() => setShowLogin(false)} style={{ flex: 1, padding: "14px", background: "#334155", borderRadius: "12px" }}>Cancel</button>
-            </div>
+        
+        {/* Empty State */}
+        {filteredList.length === 0 && (
+          <div style={{ textAlign: "center", padding: "60px 20px", color: "#94a3b8" }}>
+            <span style={{ fontSize: "40px", display: "block", marginBottom: "10px" }}>📭</span>
+            <p style={{ fontSize: "18px" }}>No businesses found for this search.</p>
           </div>
-        </div>
-      )}
+        )}
+
+      </div>
     </div>
   );
 }
